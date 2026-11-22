@@ -43,7 +43,7 @@ async def test_full_first_install_and_reload(hass, client):
     assert entry.unique_id == "123456:1:6"
     assert entry.state.value == "loaded"
     states = [s for s in hass.states.async_all() if "shahaf" in s.entity_id]
-    assert len(states) == 12
+    assert len(states) == 13
     assert all(s.state != "unavailable" for s in states)
     old_ids = {s.entity_id for s in states}
     assert await hass.config_entries.async_reload(entry.entry_id)
@@ -145,6 +145,10 @@ async def test_all_data_calendar_preserves_notices_and_untimed_lessons(hass, cli
     assert any(e.summary.startswith("1:") and not isinstance(e.start, datetime) for e in events)
     cancelled = next(e for e in events if "ביטול שיעור" in e.summary)
     assert "Period 3" in cancelled.description
+    changes = ShahafCalendar(entry.runtime_data, "changes")._events()
+    assert len(changes) == 1
+    assert "Period 3" in changes[0].summary and "ביטול שיעור" in changes[0].summary
+    assert "Bring a notebook" not in changes[0].description
     assert all("Bring a notebook" in e.description for e in events)
     assert not any(e.summary == "Bring a notebook" for e in events)
     assert await hass.config_entries.async_unload(entry.entry_id)

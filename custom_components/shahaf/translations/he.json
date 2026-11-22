@@ -83,13 +83,16 @@
     },
     "calendar": {
       "lessons": {
-        "name": "שיעורים"
+        "name": "מערכת שעות"
       },
       "school_events": {
-        "name": "אירועי בית הספר"
+        "name": "אירועים"
       },
       "all_data": {
         "name": "כל המידע"
+      },
+      "changes": {
+        "name": "שינויים"
       }
     },
     "button": {

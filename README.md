@@ -51,7 +51,13 @@ entity IDs; replace only the integration directory and restart Home Assistant.
 
 ### Calendars
 
-Each class provides **Lessons**, **School events**, and **All data** calendars.
+Each class provides separate **Timetable**, **Changes**, and **Events** calendars.
+Changes contains only published schedule changes, including cancellations and
+substitutions, with period numbers and the full notice text. Events contains exams
+and school events. Select Changes alone on a family dashboard to exclude normal
+lessons and the separate events feed.
+
+The combined **All data** calendar remains available for existing dashboards.
 All data combines timed lessons, exams, events, schedule changes (including the
 school's cancellation text), and dated notices. Period numbers and the full
 original text are retained in descriptions. Lessons without bell times appear
@@ -60,7 +66,7 @@ without assigning them an invented date. Only published dates are shown.
 
 The calendars appear automatically in Home Assistant's **Calendar** sidebar.
 Select the desired calendars there. For a dashboard, edit a Calendar card and
-add each class's **All data** entity; use the entity picker because names depend
+add each class's desired calendar entity; use the entity picker because names depend
 on your labels. Choose All data alone to avoid duplicating the separate calendars.
 
 ### Cancellation alerts (GreenAPI blueprint)

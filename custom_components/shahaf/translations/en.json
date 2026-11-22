@@ -83,13 +83,16 @@
     },
     "calendar": {
       "lessons": {
-        "name": "Lessons"
+        "name": "Timetable"
       },
       "school_events": {
-        "name": "School events"
+        "name": "Events"
       },
       "all_data": {
         "name": "All data"
+      },
+      "changes": {
+        "name": "Changes"
       }
     },
     "button": {

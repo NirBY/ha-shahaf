@@ -13,6 +13,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         [
             ShahafCalendar(entry.runtime_data, "lessons"),
             ShahafCalendar(entry.runtime_data, "school_events"),
+            ShahafCalendar(entry.runtime_data, "changes"),
             ShahafCalendar(entry.runtime_data, "all_data"),
         ]
     )
@@ -52,12 +53,12 @@ class ShahafCalendar(ShahafEntity, CalendarEntity):
                                 description="\n".join(slot["details"]),
                             )
                         )
-        if self.key in ("school_events", "all_data"):
+        if self.key in ("school_events", "changes", "all_data"):
             seen = set()
             categories = (
                 ("exams", "events", "changes", "notices")
                 if self.key == "all_data"
-                else ("exams", "events")
+                else (("changes",) if self.key == "changes" else ("exams", "events"))
             )
             items = [
                 (category, item)
@@ -74,7 +75,13 @@ class ShahafCalendar(ShahafEntity, CalendarEntity):
                     CalendarEvent(
                         start=start,
                         end=start + timedelta(days=1),
-                        summary=f"{category}: {item['text'].splitlines()[0]}",
+                        summary=(
+                            " · ".join(
+                                filter(None, [item.get("heading"), *item["text"].splitlines()])
+                            )
+                            if self.key == "changes"
+                            else f"{category}: {item['text'].splitlines()[0]}"
+                        ),
                         description="\n".join(filter(None, [item.get("heading"), item["text"]])),
                     )
                 )
