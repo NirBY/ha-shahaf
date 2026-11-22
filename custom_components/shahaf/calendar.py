@@ -13,6 +13,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         [
             ShahafCalendar(entry.runtime_data, "lessons"),
             ShahafCalendar(entry.runtime_data, "school_events"),
+            ShahafCalendar(entry.runtime_data, "all_data"),
         ]
     )
 
@@ -28,9 +29,20 @@ class ShahafCalendar(ShahafEntity, CalendarEntity):
 
     def _events(self):
         result = []
-        if self.key == "lessons":
+        if self.key in ("lessons", "all_data"):
             for day in self.coordinator.data["days"]:
                 for slot in day["lessons"]:
+                    if self.key == "all_data" and not (slot["start"] and slot["end"]):
+                        start = date.fromisoformat(day["date"])
+                        result.append(
+                            CalendarEvent(
+                                start=start,
+                                end=start + timedelta(days=1),
+                                summary=f"{slot['lesson']}: {slot['subject']}",
+                                description="Bell times not published\n"
+                                + "\n".join(slot["details"]),
+                            )
+                        )
                     if slot["start"] and slot["end"]:
                         result.append(
                             CalendarEvent(
@@ -40,10 +52,20 @@ class ShahafCalendar(ShahafEntity, CalendarEntity):
                                 description="\n".join(slot["details"]),
                             )
                         )
-        else:
+        if self.key in ("school_events", "all_data"):
             seen = set()
-            for item in self.coordinator.data["exams"] + self.coordinator.data["events"]:
-                identity = (item["date"], item["text"])
+            categories = (
+                ("exams", "events", "changes", "notices")
+                if self.key == "all_data"
+                else ("exams", "events")
+            )
+            items = [
+                (category, item)
+                for category in categories
+                for item in self.coordinator.data[category]
+            ]
+            for category, item in items:
+                identity = (item["date"], item.get("heading"), item["text"])
                 if not item["date"] or identity in seen:
                     continue
                 seen.add(identity)
@@ -52,10 +74,24 @@ class ShahafCalendar(ShahafEntity, CalendarEntity):
                     CalendarEvent(
                         start=start,
                         end=start + timedelta(days=1),
-                        summary=item["text"].splitlines()[0],
-                        description=item["text"],
+                        summary=f"{category}: {item['text'].splitlines()[0]}",
+                        description="\n".join(filter(None, [item.get("heading"), item["text"]])),
                     )
                 )
+        if self.key == "all_data":
+            undated = [
+                item["text"]
+                for key in ("changes", "exams", "events", "notices")
+                for item in self.coordinator.data[key]
+                if not item.get("date")
+            ]
+            if undated:
+                for event in result:
+                    event.description = (
+                        (event.description or "")
+                        + "\n\nUndated school notices:\n"
+                        + "\n".join(dict.fromkeys(undated))
+                    )
         return sorted(result, key=lambda event: _as_datetime(event.start))
 
     @property

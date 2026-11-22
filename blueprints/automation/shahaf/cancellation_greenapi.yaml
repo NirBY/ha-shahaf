@@ -1,0 +1,72 @@
+blueprint:
+  name: Shahaf lesson cancellation via GreenAPI
+  description: >-
+    Notify on new or changed, explicitly published cancellation notices for today
+    or later. One instance per class. Unchanged refreshes do not resend messages.
+    Initial startup establishes a baseline; this does not backfill notices added
+    while Home Assistant was stopped. Requires an existing GreenAPI notifier.
+  domain: automation
+  source_url: https://raw.githubusercontent.com/NirBY/ha-shahaf/main/blueprints/automation/shahaf/cancellation_greenapi.yaml
+  input:
+    changes_sensor:
+      name: Shahaf Schedule changes sensor
+      selector:
+        entity:
+          filter:
+            integration: shahaf
+            domain: sensor
+    class_label:
+      name: Child or class label
+      selector:
+        text: {}
+    recipient:
+      name: WhatsApp number (international digits, without +)
+      selector:
+        text: {}
+    notify_action:
+      name: GreenAPI notification action
+      default: notify.greenapi
+      selector:
+        text: {}
+mode: queued
+max: 20
+variables:
+  class_label: !input class_label
+  recipient: !input recipient
+triggers:
+  - trigger: state
+    entity_id: !input changes_sensor
+conditions:
+  - condition: template
+    value_template: >-
+      {{ trigger.from_state is not none and trigger.to_state is not none
+         and trigger.from_state.attributes.get('items') is not none
+         and trigger.to_state.state not in ['unknown', 'unavailable']
+         and not trigger.to_state.attributes.get('data_stale', false) }}
+actions:
+  - variables:
+      cancellations: >-
+        {% set ns = namespace(items=[]) %}
+        {% set old = trigger.from_state.attributes.get('items', []) %}
+        {% for item in trigger.to_state.attributes.get('items', []) %}
+          {% if item not in old and item.get('date')
+                and item.date >= now().date().isoformat()
+                and item.text | regex_search('(?m)^(?:ביטול (?:שיעור|שעור)(?:ים)?|(?:שיעור|שעור)(?:ים)?[0-9 \-]*בוטל(?:ו)?)\s*$', ignorecase=true) %}
+            {% set ns.items = ns.items + [item] %}
+          {% endif %}
+        {% endfor %}
+        {{ ns.items }}
+  - repeat:
+      for_each: '{{ cancellations }}'
+      sequence:
+        - action: !input notify_action
+          data:
+            target:
+              - "{{ recipient | replace('+', '') | replace(' ', '') | replace('-', '') }}@c.us"
+            title: 'שחף — ביטול שיעור — {{ class_label }}'
+            message: >-
+              {{ class_label }} | {{ repeat.item.date }} | {{ repeat.item.heading }}
+
+              {{ repeat.item.text }}
+
+              הודעת בית הספר מתייחסת לכיתה או לקבוצות המפורטות בה.

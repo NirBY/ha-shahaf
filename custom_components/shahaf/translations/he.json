@@ -87,6 +87,9 @@
       },
       "school_events": {
         "name": "אירועי בית הספר"
+      },
+      "all_data": {
+        "name": "כל המידע"
       }
     },
     "button": {

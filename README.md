@@ -49,6 +49,36 @@ entity IDs; replace only the integration directory and restart Home Assistant.
 
 ## Entities
 
+### Calendars
+
+Each class provides **Lessons**, **School events**, and **All data** calendars.
+All data combines timed lessons, exams, events, schedule changes (including the
+school's cancellation text), and dated notices. Period numbers and the full
+original text are retained in descriptions. Lessons without bell times appear
+as all-day entries in All data. Undated notices are included in event descriptions,
+without assigning them an invented date. Only published dates are shown.
+
+The calendars appear automatically in Home Assistant's **Calendar** sidebar.
+Select the desired calendars there. For a dashboard, edit a Calendar card and
+add each class's **All data** entity; use the entity picker because names depend
+on your labels. Choose All data alone to avoid duplicating the separate calendars.
+
+### Cancellation alerts (GreenAPI blueprint)
+
+[Import the cancellation blueprint](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2FNirBY%2Fha-shahaf%2Fmain%2Fblueprints%2Fautomation%2Fshahaf%2Fcancellation_greenapi.yaml).
+Create one automation per class, select its **Schedule changes** sensor, enter
+a class/child label and an international WhatsApp number (digits only), and use
+your existing GreenAPI notification action (default `notify.greenapi`). Credentials
+stay in that notifier's configuration. The integration does not configure GreenAPI.
+
+The blueprint sends newly added or changed explicit Hebrew cancellation notices
+for today or later. Messages include the date, periods and original school text;
+parallel groups are not assumed to apply to every student. Unchanged refreshes
+do not resend messages. Startup establishes a baseline, so this example does not
+backfill cancellations published while HA was stopped. A changed or removed and
+later republished notice can send another alert. Detection follows the configured
+refresh interval (15 minutes by default). Delivery depends on GreenAPI connectivity.
+
 Each configured class creates:
 
 | Entity | Contents |
@@ -59,6 +89,7 @@ Each configured class creates:
 | Exams / Events / Notices sensors | Published entries with dates and original text |
 | Lessons calendar | Timed slots, including all parallel subjects and published notes |
 | School events calendar | All-day entries preserving the school's event text and period information |
+| All data calendar | Lessons, changes, exams, events and dated notices; undated notices in descriptions |
 | Last refresh sensor / Refresh button | Data freshness and manual refresh |
 
 The default refresh interval is **15 minutes**. Change it under the integration's

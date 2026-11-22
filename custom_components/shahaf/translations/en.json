@@ -87,6 +87,9 @@
       },
       "school_events": {
         "name": "School events"
+      },
+      "all_data": {
+        "name": "All data"
       }
     },
     "button": {
