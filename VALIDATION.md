@@ -11,7 +11,6 @@ Verified on 22 November 2026.
 - Verified the options flow, reload and unchanged entity IDs.
 - Retrieved the lesson calendars through Home Assistant's calendar API.
 - Verified manual refresh and fresh state attributes.
-- Confirmed all 97 pre-existing Mashov entities remained present.
 
 ## Automated checks
 

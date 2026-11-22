@@ -196,7 +196,7 @@ def combine_weeks(first: dict, second: dict) -> dict:
 
 
 def compact_schedule(days: list[dict]) -> list[dict]:
-    """Stable dated contract for consumers such as the future Mashov integration."""
+    """Stable dated contract for timetable consumers."""
     return [
         {
             **day,

@@ -125,39 +125,6 @@ The first version understands the Hebrew presentation format currently returned
 by the app. Unknown timetable layouts fail visibly instead of silently becoming
 an empty timetable. The upstream API is unofficial and may change.
 
-## Future Mashov integration
-
-This integration is independent of `ha-mashov`; installing it does not change
-Mashov entities or dashboards. The `schedule` attribute provides a stable,
-versioned input for a future merge:
-
-```json
-{
-  "schema_version": 1,
-  "school_id": "123456",
-  "campus_code": 1,
-  "class_id": 6,
-  "class_name": "ז - 6",
-  "scope": "class",
-  "data_stale": false,
-  "schedule": [{
-    "date": "2026-11-22",
-    "day": 1,
-    "lessons": [{
-      "lesson": 1,
-      "subject": "Math / English",
-      "start": "2026-11-22T08:30:00+02:00",
-      "end": "2026-11-22T09:15:00+02:00"
-    }]
-  }]
-}
-```
-
-`day` is 1=Sunday through 7=Saturday. `class_id` is Shahaf's internal identifier,
-**not** `grade * 100 + class number`. Match the ministry school ID, campus and
-class name before joining data. Use the full ISO `date` and freshness metadata;
-do not substitute the entire class schedule for a student's selected groups.
-
 ## Credentials and development
 
 Credentials live in Home Assistant's config entry. Session tokens stay in memory.
@@ -172,8 +139,8 @@ ruff check custom_components tests run_tests.py
 ```
 
 On Windows use `python run_tests.py -q`; it adapts Unix-only test-framework imports
-and the local event-loop socket pair, as in the existing Mashov project. Linux CI
-runs the unmodified Home Assistant test framework. Tests use fictional data.
+and the local event-loop socket pair. Linux CI runs the unmodified Home Assistant
+test framework. Tests use fictional data.
 
 The GitHub workflow also runs Hassfest and all HACS validation checks, including
 Brands.

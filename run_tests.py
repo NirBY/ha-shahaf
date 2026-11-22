@@ -1,4 +1,4 @@
-"""Run HA's tests on Windows using the same adaptations as ha-mashov.
+"""Run HA's tests on Windows with platform compatibility adaptations.
 
 Linux CI runs pytest directly. Only Unix process-lock/resource APIs and the
 Windows loopback socket pair need adaptation; integration behavior is real.
