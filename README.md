@@ -99,7 +99,7 @@ Each configured class creates:
 | Schedule changes sensor | Dated replacement, cancellation and other notices as published by the school |
 | Exams / Events / Notices sensors | Published entries with dates and original text |
 | Lessons calendar | Timed slots, including all parallel subjects and published notes |
-| School events calendar | All-day entries preserving the school's event text and period information |
+| Events calendar | Exams and events; matched timetable times when available, otherwise all-day |
 | All data calendar | Lessons, changes, exams, events and dated notices; undated notices in descriptions |
 | Last refresh sensor / Refresh button | Data freshness and manual refresh |
 
@@ -122,8 +122,10 @@ It does not infer that a notice cancels every parallel group in a time slot.
 
 Only returned dates are exposed: lessons are not repeated into future weeks.
 Missing bell times remain missing and are omitted from the timed calendar.
-School events use all-day calendar entries; their original period information is
-kept in the description. Multiple events grouped by Shahaf on one day remain
+School events and changes use timetable start/end times when one explicit period
+range can be matched completely to that class on the same date. Explicitly all-day
+events, missing times, and ambiguous ranges stay all-day; no times are invented.
+Original period information is kept in the description. Multiple events grouped by Shahaf on one day remain
 together. An exam may appear under **Events** if the school publishes it there.
 
 The first version understands the Hebrew presentation format currently returned

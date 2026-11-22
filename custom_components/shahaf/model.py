@@ -207,3 +207,41 @@ def compact_schedule(days: list[dict]) -> list[dict]:
         }
         for day in days
     ]
+
+
+def notice_time_range(item: dict, days: list[dict]) -> tuple[datetime, datetime] | None:
+    """Match one explicit period range against this class's published date only."""
+    text = "\n".join(filter(None, [item.get("heading"), item.get("text")]))
+    if "במשך כל היום" in text:
+        return None
+    periods = set()
+    for line in text.splitlines():
+        match = re.fullmatch(
+            r"\s*(?:שעור|שיעור)(?:ים)?\s+(\d{1,2})(?:\s*[-–—]\s*(\d{1,2}))?\s*",
+            line,
+        )
+        if match:
+            periods.add((int(match[1]), int(match[2] or match[1])))
+    if len(periods) != 1:
+        return None
+    first, last = periods.pop()
+    if last < first:
+        return None
+    day = next((day for day in days if day["date"] == item.get("date")), None)
+    if day is None:
+        return None
+    times = []
+    for period in range(first, last + 1):
+        slots = [slot for slot in day["lessons"] if slot["lesson"] == period]
+        if not slots or any(not slot.get("start") or not slot.get("end") for slot in slots):
+            return None
+        bounds = {(slot["start"], slot["end"]) for slot in slots}
+        if len(bounds) != 1:
+            return None
+        start, end = (datetime.fromisoformat(value) for value in bounds.pop())
+        if start.date().isoformat() != item["date"] or end <= start:
+            return None
+        if times and times[-1][1] > start:
+            return None
+        times.append((start, end))
+    return times[0][0], times[-1][1]

@@ -6,7 +6,7 @@ from homeassistant.components.calendar import CalendarEntity, CalendarEvent
 
 from .entity import ShahafEntity
 from .localization import calendar_labels, load_calendar_translations
-from .model import TZ
+from .model import TZ, notice_time_range
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -77,10 +77,11 @@ class ShahafCalendar(ShahafEntity, CalendarEntity):
                     continue
                 seen.add(identity)
                 start = date.fromisoformat(item["date"])
+                times = notice_time_range(item, self.coordinator.data["days"])
                 result.append(
                     CalendarEvent(
-                        start=start,
-                        end=start + timedelta(days=1),
+                        start=times[0] if times else start,
+                        end=times[1] if times else start + timedelta(days=1),
                         summary=(
                             f"{labels[category]}: "
                             + " · ".join(
