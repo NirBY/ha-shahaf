@@ -1,0 +1,98 @@
+{
+  "title": "Shahaf Timetable",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Shahaf",
+        "description": "Use your Shahaf student-app login. Credentials are stored in Home Assistant.",
+        "data": {
+          "school_id": "School ID (Semel)",
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "campus": {
+        "title": "Choose campus",
+        "data": {
+          "campus_code": "Campus"
+        }
+      },
+      "class": {
+        "title": "Choose class",
+        "description": "This is a class timetable, including parallel groups and school notes. Add another entry for each additional class.",
+        "data": {
+          "class_id": "Class",
+          "name": "Label (optional, for example the child’s name)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect to Shahaf",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "The login was rejected. Check the username and password.",
+      "cannot_connect": "Unable to read the published timetable. Please try again.",
+      "school_not_found": "This school or campus is not available to the account.",
+      "no_data": "The school has not published data for this selection."
+    },
+    "abort": {
+      "already_configured": "This class is already configured.",
+      "reauth_successful": "Credentials updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Refresh settings",
+        "data": {
+          "scan_interval": "Refresh interval (minutes, 5–1440)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "timetable": {
+        "name": "Published timetable"
+      },
+      "today": {
+        "name": "Today"
+      },
+      "tomorrow": {
+        "name": "Tomorrow"
+      },
+      "changes": {
+        "name": "Schedule changes"
+      },
+      "exams": {
+        "name": "Exams"
+      },
+      "events": {
+        "name": "Events"
+      },
+      "notices": {
+        "name": "Notices"
+      },
+      "last_refresh": {
+        "name": "Last refresh"
+      }
+    },
+    "calendar": {
+      "lessons": {
+        "name": "Lessons"
+      },
+      "school_events": {
+        "name": "School events"
+      }
+    },
+    "button": {
+      "refresh": {
+        "name": "Refresh"
+      }
+    }
+  }
+}

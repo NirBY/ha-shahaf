@@ -1,0 +1,98 @@
+{
+  "title": "שחף מערכת שעות",
+  "config": {
+    "step": {
+      "user": {
+        "title": "חיבור לשחף",
+        "description": "פרטי ההתחברות לאפליקציית התלמידים של שחף. הפרטים נשמרים ב-Home Assistant.",
+        "data": {
+          "school_id": "סמל מוסד",
+          "username": "שם משתמש",
+          "password": "סיסמה"
+        }
+      },
+      "campus": {
+        "title": "בחירת בית ספר",
+        "data": {
+          "campus_code": "בית ספר"
+        }
+      },
+      "class": {
+        "title": "בחירת כיתה",
+        "description": "מערכת כיתתית הכוללת קבוצות מקבילות והערות בית הספר. יש להוסיף חיבור נפרד לכל כיתה נוספת.",
+        "data": {
+          "class_id": "כיתה",
+          "name": "תווית (אפשר להזין את שם הילד)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "חיבור מחדש לשחף",
+        "data": {
+          "username": "שם משתמש",
+          "password": "סיסמה"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "ההתחברות נדחתה. יש לבדוק שם משתמש וסיסמה.",
+      "cannot_connect": "לא ניתן לקרוא את המערכת שפורסמה. נסו שוב.",
+      "school_not_found": "בית הספר אינו זמין לחשבון זה.",
+      "no_data": "בית הספר לא פרסם נתונים לבחירה זו."
+    },
+    "abort": {
+      "already_configured": "כיתה זו כבר מוגדרת.",
+      "reauth_successful": "פרטי ההתחברות עודכנו."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "הגדרות רענון",
+        "data": {
+          "scan_interval": "מרווח רענון בדקות (5–1440)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "timetable": {
+        "name": "מערכת שפורסמה"
+      },
+      "today": {
+        "name": "היום"
+      },
+      "tomorrow": {
+        "name": "מחר"
+      },
+      "changes": {
+        "name": "שינויי מערכת"
+      },
+      "exams": {
+        "name": "מבחנים"
+      },
+      "events": {
+        "name": "אירועים"
+      },
+      "notices": {
+        "name": "הודעות"
+      },
+      "last_refresh": {
+        "name": "רענון אחרון"
+      }
+    },
+    "calendar": {
+      "lessons": {
+        "name": "שיעורים"
+      },
+      "school_events": {
+        "name": "אירועי בית הספר"
+      }
+    },
+    "button": {
+      "refresh": {
+        "name": "רענון"
+      }
+    }
+  }
+}
