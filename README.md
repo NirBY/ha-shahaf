@@ -8,7 +8,19 @@ login. A connected phone is only needed for development research, not normal use
 
 Requires Home Assistant **2026.2 or newer**. Setup is available in English and Hebrew.
 
-### HACS custom repository
+### Marketplace (Home Assistant 2026.11 and newer)
+
+[Open Shahaf in your Marketplace](https://my.home-assistant.io/redirect/marketplace_repository/?owner=NirBY&repository=ha-shahaf&category=integration)
+
+Open **Settings → Marketplace → Add from link** and enter
+`https://github.com/NirBY/ha-shahaf`. Select **Add**, then **Install**. Connect
+GitHub if prompted. Marketplace opens the integration setup after installation,
+or tells you if a restart is required.
+
+Marketplace replaces HACS in Home Assistant 2026.11 and supports the same
+repository format. See the [official Marketplace guide](https://www.home-assistant.io/integrations/marketplace/).
+
+### HACS custom repository (older Home Assistant versions)
 
 1. In HACS, open **⋮ → Custom repositories**.
 2. Add `https://github.com/NirBY/ha-shahaf`, category **Integration**.

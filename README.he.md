@@ -5,6 +5,12 @@
 
 ## התקנה
 
+ב-Home Assistant ‏2026.11 ומעלה: **הגדרות → Marketplace → הוספה מקישור**,
+הזינו `https://github.com/NirBY/ha-shahaf` ובחרו הוספה והתקנה.
+ה-Marketplace מחליף את HACS בגרסאות אלה.
+
+[פתיחה ב-Marketplace](https://my.home-assistant.io/redirect/marketplace_repository/?owner=NirBY&repository=ha-shahaf&category=integration)
+
 ב-HACS: בתפריט **⋮ → מאגרים מותאמים אישית**, הוסיפו את
 `https://github.com/NirBY/ha-shahaf` מסוג **Integration**, התקינו והפעילו מחדש
 את Home Assistant. המאגר אינו מופיע עדיין בקטלוג ברירת המחדל של HACS.
