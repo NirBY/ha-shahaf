@@ -1,5 +1,7 @@
 # Shahaf Timetable for Home Assistant
 
+<img src="custom_components/shahaf/brand/icon.png" alt="Shahaf Timetable app icon" width="96" height="96">
+
 Unofficial integration for **שחף מערכת שעות**, the Android app
 `com.shahafsoft.timetableapp`. Connect directly to Shahaf with the app's student
 login. A connected phone is only needed for development research, not normal use.
@@ -31,7 +33,8 @@ repository format. See the [official Marketplace guide](https://www.home-assista
 
 This repository supports HACS custom installation. It is not yet included in
 HACS's default searchable catalog. Default-catalog inclusion needs a separate
-submission, including a Home Assistant Brands entry.
+submission and review. The integration includes its own brand images, which
+satisfy the HACS Brands check without a separate Brands repository submission.
 
 ### Manual installation
 
@@ -135,7 +138,17 @@ On Windows use `python run_tests.py -q`; it adapts Unix-only test-framework impo
 and the local event-loop socket pair, as in the existing Mashov project. Linux CI
 runs the unmodified Home Assistant test framework. Tests use fictional data.
 
-The GitHub workflow also runs Hassfest and HACS validation. HACS's Brands check is
-excluded until a separate brand submission is made.
+The GitHub workflow also runs Hassfest and all HACS validation checks, including
+Brands.
+
+## App icon
+
+The original icon from the [Shahaf Android app on Google Play](https://play.google.com/store/apps/details?id=com.shahafsoft.timetableapp)
+is bundled in `custom_components/shahaf/brand` at 256 and 512 pixels. It belongs
+to Shahaf Educational Information Systems Ltd and is used to identify the service;
+the integration's MIT license does not grant rights to Shahaf's trademarks or artwork.
+Home Assistant **2026.3 and newer** displays these local brand images. Earlier
+supported versions can still use the integration but may show a placeholder icon.
+See [Home Assistant's local brand image support](https://contributors.home-assistant.io/blog/2026/02/24/brands-proxy-api/).
 
 Not affiliated with or endorsed by Shahaf or the Ministry of Education.

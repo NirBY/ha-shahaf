@@ -1,4 +1,4 @@
-# Version 0.1.0 validation
+# Shahaf Timetable validation
 
 Verified on 22 November 2026.
 
@@ -21,9 +21,11 @@ credential recovery, transport failure handling, session renewal, exact API
 routes, calendar boundaries, parallel groups, missing times, year boundaries,
 and Israel daylight-saving offsets. Ruff and Python compilation passed.
 
-Linux tests, Hassfest and HACS checks are configured in the GitHub workflow.
-Their results must be checked after publication. Default HACS catalog inclusion
-and a Home Assistant Brands entry are not part of this release.
+Linux tests, Hassfest and the nine enabled HACS checks passed for version 0.1.0.
+That release skipped the Brands check. Version 0.1.1 bundles the original app
+icon in the integration's `brand` directory and enables the Brands check too.
+The GitHub workflow validates each published revision. Default HACS catalog
+inclusion is a separate review and is not claimed by these checks.
 
 ## Data and privacy checks
 
