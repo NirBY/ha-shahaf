@@ -34,6 +34,7 @@ class ShahafCoordinator(DataUpdateCoordinator[dict]):
         )
         self.client = client
         self.entry = entry
+        self.calendar_translations: dict[str, dict[str, str]] = {}
 
     async def _async_update_data(self) -> dict:
         today = datetime.now(TZ).date()

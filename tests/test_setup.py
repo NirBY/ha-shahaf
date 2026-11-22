@@ -130,12 +130,19 @@ async def test_reauth_updates_existing_entry(hass, client):
     assert entry.data["password"] == "new_secret"
 
 
-async def test_all_data_calendar_preserves_notices_and_untimed_lessons(hass, client):
+@pytest.mark.parametrize(
+    ("language", "changes_label"),
+    [("en", "Changes"), ("he", "שינויים"), ("he-IL", "שינויים"), ("de", "Changes")],
+)
+async def test_all_data_calendar_preserves_notices_and_untimed_lessons(
+    hass, client, language, changes_label
+):
     from custom_components.shahaf.calendar import ShahafCalendar
 
     entry = MockConfigEntry(domain=DOMAIN, data=DATA, unique_id="123456:1:6")
     entry.add_to_hass(hass)
     assert await hass.config_entries.async_setup(entry.entry_id)
+    hass.config.language = language
     data = entry.runtime_data.data
     day = data["days"][0]
     day["lessons"][0]["start"] = day["lessons"][0]["end"] = None
@@ -147,6 +154,7 @@ async def test_all_data_calendar_preserves_notices_and_untimed_lessons(hass, cli
     assert "Period 3" in cancelled.description
     changes = ShahafCalendar(entry.runtime_data, "changes")._events()
     assert len(changes) == 1
+    assert changes[0].summary.startswith(changes_label + ":")
     assert "Period 3" in changes[0].summary and "ביטול שיעור" in changes[0].summary
     assert "Bring a notebook" not in changes[0].description
     assert all("Bring a notebook" in e.description for e in events)

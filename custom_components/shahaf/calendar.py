@@ -5,10 +5,14 @@ from datetime import date, datetime, time, timedelta
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
 
 from .entity import ShahafEntity
+from .localization import calendar_labels, load_calendar_translations
 from .model import TZ
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
+    entry.runtime_data.calendar_translations = await hass.async_add_executor_job(
+        load_calendar_translations
+    )
     async_add_entities(
         [
             ShahafCalendar(entry.runtime_data, "lessons"),
@@ -29,6 +33,9 @@ class ShahafCalendar(ShahafEntity, CalendarEntity):
         self.key = key
 
     def _events(self):
+        labels = calendar_labels(
+            self.coordinator.calendar_translations, self.coordinator.hass.config.language
+        )
         result = []
         if self.key in ("lessons", "all_data"):
             for day in self.coordinator.data["days"]:
@@ -40,8 +47,7 @@ class ShahafCalendar(ShahafEntity, CalendarEntity):
                                 start=start,
                                 end=start + timedelta(days=1),
                                 summary=f"{slot['lesson']}: {slot['subject']}",
-                                description="Bell times not published\n"
-                                + "\n".join(slot["details"]),
+                                description=labels["untimed"] + "\n" + "\n".join(slot["details"]),
                             )
                         )
                     if slot["start"] and slot["end"]:
@@ -76,11 +82,12 @@ class ShahafCalendar(ShahafEntity, CalendarEntity):
                         start=start,
                         end=start + timedelta(days=1),
                         summary=(
-                            " · ".join(
+                            f"{labels[category]}: "
+                            + " · ".join(
                                 filter(None, [item.get("heading"), *item["text"].splitlines()])
                             )
                             if self.key == "changes"
-                            else f"{category}: {item['text'].splitlines()[0]}"
+                            else f"{labels[category]}: {item['text'].splitlines()[0]}"
                         ),
                         description="\n".join(filter(None, [item.get("heading"), item["text"]])),
                     )
@@ -96,7 +103,7 @@ class ShahafCalendar(ShahafEntity, CalendarEntity):
                 for event in result:
                     event.description = (
                         (event.description or "")
-                        + "\n\nUndated school notices:\n"
+                        + f"\n\n{labels['undated']}:\n"
                         + "\n".join(dict.fromkeys(undated))
                     )
         return sorted(result, key=lambda event: _as_datetime(event.start))

@@ -58,6 +58,11 @@ and school events. Select Changes alone on a family dashboard to exclude normal
 lessons and the separate events feed.
 
 The combined **All data** calendar remains available for existing dashboards.
+
+Calendar category labels follow Home Assistant's configured language: English
+or Hebrew, including Updates / עדכונים, Events / אירועים and Changes / שינויים.
+School-provided text and student names remain exactly as published. Unsupported
+languages fall back to English; regional variants fall back to their base language.
 All data combines timed lessons, exams, events, schedule changes (including the
 school's cancellation text), and dated notices. Period numbers and the full
 original text are retained in descriptions. Lessons without bell times appear
@@ -124,6 +129,16 @@ together. An exam may appear under **Events** if the school publishes it there.
 The first version understands the Hebrew presentation format currently returned
 by the app. Unknown timetable layouts fail visibly instead of silently becoming
 an empty timetable. The upstream API is unofficial and may change.
+
+## Adding languages
+
+Copy `custom_components/shahaf/calendar_translations/en.json` to `<language>.json`
+in the same folder and translate its values, keeping the keys. No calendar logic
+changes are needed. Missing translated keys fall back to English. For translated
+setup forms and entity names, also copy and translate `translations/en.json`
+using Home Assistant's translation format. Restart after adding translation files.
+Event text uses the server language, so all users receive the same event titles;
+school-provided content is not automatically translated.
 
 ## Credentials and development
 
